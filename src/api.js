@@ -3,7 +3,7 @@
 const API_BASE = "https://moneta-ict.onrender.com/api";
 
 // ---------------- AUTH ----------------
-export async function registerUser(data) {
+async function registerUser(data) {
   const res = await fetch(`${API_BASE}/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -12,7 +12,7 @@ export async function registerUser(data) {
   return res.json();
 }
 
-export async function loginUser(data) {
+async function loginUser(data) {
   const res = await fetch(`${API_BASE}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -22,7 +22,7 @@ export async function loginUser(data) {
 }
 
 // ---------------- DASHBOARD ----------------
-export async function getDashboard(token) {
+async function getDashboard(token) {
   const res = await fetch(`${API_BASE}/dashboard`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -32,7 +32,7 @@ export async function getDashboard(token) {
 }
 
 // ---------------- INVEST ----------------
-export async function investPlan(token, planId, amount) {
+async function investPlan(token, planId, amount) {
   const res = await fetch(`${API_BASE}/invest`, {
     method: "POST",
     headers: {
@@ -45,7 +45,7 @@ export async function investPlan(token, planId, amount) {
 }
 
 // ---------------- WITHDRAW ----------------
-export async function withdrawFunds(token, amount, method) {
+async function withdrawFunds(token, amount, method) {
   const res = await fetch(`${API_BASE}/withdraw`, {
     method: "POST",
     headers: {
@@ -58,7 +58,7 @@ export async function withdrawFunds(token, amount, method) {
 }
 
 // ---------------- REFERRALS ----------------
-export async function getReferrals(token) {
+async function getReferrals(token) {
   const res = await fetch(`${API_BASE}/referrals`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -68,7 +68,7 @@ export async function getReferrals(token) {
 }
 
 // ---------------- ADMIN ----------------
-export async function getAdminDashboard(token) {
+async function getAdminDashboard(token) {
   const res = await fetch(`${API_BASE}/admin/dashboard`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -77,7 +77,7 @@ export async function getAdminDashboard(token) {
   return res.json();
 }
 
-export async function getAdminPayments(token) {
+async function getAdminPayments(token) {
   const res = await fetch(`${API_BASE}/admin/payments`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -85,3 +85,27 @@ export async function getAdminPayments(token) {
   });
   return res.json();
 }
+
+// ✅ Named exports
+export {
+  registerUser,
+  loginUser,
+  getDashboard,
+  investPlan,
+  withdrawFunds,
+  getReferrals,
+  getAdminDashboard,
+  getAdminPayments,
+};
+
+// ✅ Default export (THIS FIXES YOUR ERROR)
+export default {
+  registerUser,
+  loginUser,
+  getDashboard,
+  investPlan,
+  withdrawFunds,
+  getReferrals,
+  getAdminDashboard,
+  getAdminPayments,
+};
