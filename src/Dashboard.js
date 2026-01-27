@@ -6,18 +6,63 @@ export default function Dashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    API.dashboard(token).then(setData);
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
+
+    API.dashboard(token).then((res) => {
+      if (res.message === "Invalid token") {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      } else {
+        setData(res);
+      }
+    });
   }, []);
 
-  if (!data) return <div>Loading...</div>;
+  if (!data) return <div>Loading dashboard...</div>;
 
   return (
     <div className="page">
       <h2>MONETA-ICT Dashboard</h2>
-      <p><b>Balance:</b> ${data.balance}</p>
-      <p><b>Total Invested:</b> ${data.total_invested}</p>
-      <p><b>Weekly ROI:</b> ${data.weekly_roi}</p>
-      <p><b>Referrals:</b> {data.referrals}</p>
+
+      <div className="card">
+        <strong>Email:</strong> {data.email}
+      </div>
+
+      <div className="card">
+        <strong>Balance:</strong> ${data.balance}
+      </div>
+
+      <div className="card">
+        <strong>Total Invested:</strong> ${data.total_invested}
+      </div>
+
+      <div className="card">
+        <strong>Active Plans:</strong> {data.active_plans}
+      </div>
+
+      <div className="card">
+        <strong>Referral Earnings:</strong> ${data.referral_earnings}
+      </div>
+
+      <button onClick={() => (window.location.href = "/plans")}>
+        Invest Now
+      </button>
+
+      <button onClick={() => (window.location.href = "/withdraw")}>
+        Withdraw
+      </button>
+
+      <button
+        onClick={() => {
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+        }}
+      >
+        Logout
+      </button>
     </div>
   );
 }
