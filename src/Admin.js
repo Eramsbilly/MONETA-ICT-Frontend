@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import API from "./api";
 
 export default function Admin() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    API.dashboard(token).then((res) => setData(res.users || []));
+  }, []);
+
   return (
-    <div className="card">
-      <h2>Admin Dashboard</h2>
-      <p>MONETA-ICT Admin Panel</p>
-      <ul>
-        <li>View deposits</li>
-        <li>Approve withdrawals</li>
-        <li>Manage users</li>
-        <li>Referral earnings</li>
-      </ul>
+    <div className="page">
+      <h2>Admin Panel</h2>
+      {data.map((u, i) => (
+        <div key={i}>
+          {u.email} — Balance: ${u.balance}
+        </div>
+      ))}
     </div>
   );
 }
