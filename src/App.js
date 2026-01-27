@@ -1,34 +1,37 @@
-import React, { useState } from "react";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import Plans from "./pages/Plans";
-import Deposit from "./pages/Deposit";
-import Withdraw from "./pages/Withdraw";
-import Referrals from "./pages/Referrals";
-import History from "./pages/History";
-import Admin from "./pages/Admin";
-import Navbar from "./components/Navbar";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./Navbar";
+import Dashboard from "./Dashboard";
+import Plans from "./Plans";
+import Deposit from "./Deposit";
+import Withdraw from "./Withdraw";
+import History from "./History";
+import WalletBox from "./WalletBox";
+import Referrals from "./Referrals";
+import Login from "./Login";
+import Register from "./Register";
+import Admin from "./Admin";
+import AdminPayments from "./AdminPayments";
 
-export default function App() {
-  const [page, setPage] = useState("login");
-  const [token, setToken] = useState(localStorage.getItem("token"));
-
-  const go = (p) => setPage(p);
-
-  if (!token && page !== "register") return <Login setToken={setToken} go={go} />;
-  if (!token && page === "register") return <Register setToken={setToken} go={go} />;
-
+function App() {
   return (
-    <div style={{ padding: 16 }}>
-      <Navbar go={go} />
-      {page === "dashboard" && <Dashboard token={token} />}
-      {page === "plans" && <Plans token={token} />}
-      {page === "deposit" && <Deposit token={token} />}
-      {page === "withdraw" && <Withdraw token={token} />}
-      {page === "referrals" && <Referrals token={token} />}
-      {page === "history" && <History token={token} />}
-      {page === "admin" && <Admin token={token} />}
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/plans" element={<Plans />} />
+        <Route path="/deposit" element={<Deposit />} />
+        <Route path="/withdraw" element={<Withdraw />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/wallet" element={<WalletBox />} />
+        <Route path="/referrals" element={<Referrals />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin-payments" element={<AdminPayments />} />
+      </Routes>
+    </Router>
   );
-      }
+}
+
+export default App;
