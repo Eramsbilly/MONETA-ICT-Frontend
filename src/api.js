@@ -1,24 +1,26 @@
 const BASE_URL = "https://moneta-ict-backend.onrender.com";
 
-export const API = {
-  register: async (email, password, ref) => {
-    const res = await fetch(`${BASE_URL}/api/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, ref }),
-    });
-    return res.json();
-  },
+/* --- Named exports (for Login.js, Register.js) --- */
+export const loginUser = async (email, password) => {
+  const res = await fetch(`${BASE_URL}/api/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+  return res.json();
+};
 
-  login: async (email, password) => {
-    const res = await fetch(`${BASE_URL}/api/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    return res.json();
-  },
+export const registerUser = async (email, password, ref) => {
+  const res = await fetch(`${BASE_URL}/api/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password, ref }),
+  });
+  return res.json();
+};
 
+/* --- Default API object (for Dashboard, Plans, etc.) --- */
+const API = {
   dashboard: async (token) => {
     const res = await fetch(`${BASE_URL}/api/dashboard`, {
       headers: { Authorization: `Bearer ${token}` },
