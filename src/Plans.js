@@ -1,32 +1,34 @@
 import React from "react";
 import API from "./api";
+import PlanCard from "./PlanCard";
 
-const plans = [
-  { id: 1, name: "Starter", min: 25, roi: 5 },
-  { id: 2, name: "Silver", min: 50, roi: 12 },
-  { id: 3, name: "Gold", min: 100, roi: 25 },
-  { id: 4, name: "Diamond", min: 250, roi: 70 },
+const PLANS = [
+  { id: 1, name: "Starter", amount: 25, weekly: 5, weeks: 6 },
+  { id: 2, name: "Bronze", amount: 50, weekly: 12, weeks: 6 },
+  { id: 3, name: "Silver", amount: 100, weekly: 30, weeks: 6 },
+  { id: 4, name: "Gold", amount: 250, weekly: 90, weeks: 6 },
+  { id: 5, name: "Platinum", amount: 500, weekly: 200, weeks: 6 },
 ];
 
 export default function Plans() {
   const invest = async (plan) => {
-    const amount = prompt(`Enter amount (min $${plan.min})`);
     const token = localStorage.getItem("token");
-    const res = await API.invest(token, plan.id, amount);
+    if (!token) return alert("Please login");
+
+    const res = await API.invest(token, plan.id, plan.amount);
+
     alert(res.message || "Investment submitted");
   };
 
   return (
     <div className="page">
       <h2>Investment Plans</h2>
-      {plans.map((p) => (
-        <div key={p.id} className="card">
-          <h3>{p.name}</h3>
-          <p>Min: ${p.min}</p>
-          <p>Weekly ROI: ${p.roi}</p>
-          <button onClick={() => invest(p)}>Invest</button>
-        </div>
-      ))}
+
+      <div className="grid">
+        {PLANS.map((p) => (
+          <PlanCard key={p.id} plan={p} onInvest={() => invest(p)} />
+        ))}
+      </div>
     </div>
   );
 }
