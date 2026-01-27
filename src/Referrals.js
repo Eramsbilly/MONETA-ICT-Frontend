@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import API from "./api";
 
 export default function Referrals() {
+  const [refs, setRefs] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    API.referrals(token).then(setRefs);
+  }, []);
+
   return (
-    <div className="card">
-      <h2>Your Referral Link</h2>
-      <input value="https://moneta-ict.onrender.com/register?ref=USER123" readOnly />
-      <p>5% referral bonus</p>
+    <div className="page">
+      <h2>Your Referrals</h2>
+      <ul>
+        {refs.map((r, i) => (
+          <li key={i}>{r.email} — Bonus: ${r.bonus}</li>
+        ))}
+      </ul>
     </div>
   );
 }
