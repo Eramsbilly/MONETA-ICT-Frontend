@@ -4,52 +4,36 @@ import { loginUser } from "./api";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  const submit = async () => {
+    const res = await loginUser(email, password);
 
-    try {
-      const res = await loginUser({ email, password });
-      localStorage.setItem("token", res.data.token);
+    if (res.token) {
+      localStorage.setItem("token", res.token);
       window.location.href = "/dashboard";
-    } catch (err) {
-      setError("Invalid login details");
-    } finally {
-      setLoading(false);
+    } else {
+      alert(res.message || "Login failed");
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2>MONETA-ICT Login</h2>
+    <div className="page">
+      <h2>Login</h2>
 
-      {error && <p className="error">{error}</p>}
+      <input
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
-        <button disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+      <button onClick={submit}>Login</button>
     </div>
   );
 }
