@@ -1,12 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
+import { loginUser } from "./api";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await loginUser({ email, password });
+      localStorage.setItem("token", res.data.token);
+      window.location.href = "/dashboard";
+    } catch (err) {
+      setError("Invalid login details");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="card">
-      <h2>Login</h2>
-      <input placeholder="Email" />
-      <input type="password" placeholder="Password" />
-      <button className="btn">Login</button>
+    <div className="auth-container">
+      <h2>MONETA-ICT Login</h2>
+
+      {error && <p className="error">{error}</p>}
+
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <button disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+      </form>
     </div>
   );
 }
