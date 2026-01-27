@@ -1,48 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { getDashboard } from "./api";
-import WalletBox from "./WalletBox";
-import Plans from "./Plans";
+import API from "./api";
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    async function load() {
-      try {
-        const res = await getDashboard();
-        setData(res.data);
-      } catch (err) {
-        setError("Session expired. Please login again.");
-        localStorage.removeItem("token");
-        window.location.href = "/login";
-      }
-    }
-    load();
+    const token = localStorage.getItem("token");
+    API.dashboard(token).then(setData);
   }, []);
 
-  if (error) return <p>{error}</p>;
-  if (!data) return <p>Loading dashboard...</p>;
+  if (!data) return <div>Loading...</div>;
 
   return (
-    <div className="dashboard">
+    <div className="page">
       <h2>MONETA-ICT Dashboard</h2>
-
-      <WalletBox balance={data.balance} />
-
-      <div className="referral-box">
-        <p>Your Referral Code:</p>
-        <strong>{data.referral_code}</strong>
-        <p>
-          Referral Link:
-          <br />
-          <small>
-            {window.location.origin}/register?ref={data.referral_code}
-          </small>
-        </p>
-      </div>
-
-      <Plans />
+      <p><b>Balance:</b> ${data.balance}</p>
+      <p><b>Total Invested:</b> ${data.total_invested}</p>
+      <p><b>Weekly ROI:</b> ${data.weekly_roi}</p>
+      <p><b>Referrals:</b> {data.referrals}</p>
     </div>
   );
 }
