@@ -6,7 +6,6 @@ import Dashboard from "./Dashboard";
 import Plans from "./Plans";
 import Deposit from "./Deposit";
 import Withdraw from "./Withdraw";
-import Transactions from "./Transactions";
 import Referrals from "./Referrals";
 import Admin from "./Admin";
 
@@ -21,7 +20,6 @@ export default function App() {
         <Route path="/plans" element={<Plans />} />
         <Route path="/deposit" element={<Deposit />} />
         <Route path="/withdraw" element={<Withdraw />} />
-        <Route path="/transactions" element={<Transactions />} />
         <Route path="/referrals" element={<Referrals />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
