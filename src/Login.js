@@ -1,26 +1,28 @@
 import { useState } from "react";
-import { api } from "./api";
+import { apiRequest } from "./api";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const login = async () => {
-    const res = await api("/login", "POST", { email, password });
+    const res = await apiRequest("/login", "POST", { email, password });
     if (res.token) {
       localStorage.setItem("token", res.token);
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     } else {
-      alert("Credenciales incorrectas");
+      alert("Login failed");
     }
   };
 
   return (
-    <div>
-      <h2>Iniciar Sesión</h2>
-      <input placeholder="Email" onChange={e => setEmail(e.target.value)} />
-      <input type="password" placeholder="Contraseña" onChange={e => setPassword(e.target.value)} />
-      <button onClick={login}>Entrar</button>
+    <div style={{ padding: 20 }}>
+      <h2>Login</h2>
+      <input placeholder="Email" onChange={e => setEmail(e.target.value)} /><br />
+      <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} /><br />
+      <button onClick={login}>Enter</button>
     </div>
   );
 }
