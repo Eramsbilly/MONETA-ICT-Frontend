@@ -1,32 +1,32 @@
 import { useState } from "react";
+import { apiRequest } from "./api";
 
 export default function Withdraw() {
   const [amount, setAmount] = useState("");
 
+  async function submit() {
+    if (!amount || amount < 25000) {
+      alert("Minimum withdrawal is 25,000 COP");
+      return;
+    }
+
+    await apiRequest("/withdraw", "POST", { amount });
+    alert("Withdrawal request sent.");
+    setAmount("");
+  }
+
   return (
     <div style={{ padding: 20 }}>
-      <h2>🏧 Retiro de Fondos</h2>
-
-      <p>
-        💡 Mínimo retiro: <b>$25.000 COP</b>
-      </p>
+      <h2>🏧 Withdraw</h2>
 
       <input
         type="number"
-        placeholder="Monto en COP"
+        placeholder="Amount (COP)"
         value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={e => setAmount(e.target.value)}
       />
 
-      <button
-        onClick={() => alert("Solicitud enviada. En revisión.")}
-      >
-        📩 Solicitar retiro
-      </button>
-
-      <p style={{ marginTop: 10, color: "gray" }}>
-        ⏳ Los retiros se procesan tras aprobación del administrador.
-      </p>
+      <button onClick={submit}>Request Withdrawal</button>
     </div>
   );
 }
