@@ -1,66 +1,46 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function Dashboard() {
-  const [stats, setStats] = useState({
-    balance: 120000,
-    bonus: 12000,
-    investments: 2,
-    referrals: 1,
-  });
-
-  const [transactions, setTransactions] = useState([
-    { id: 1, type: "Deposit", amount: 50000, status: "Approved" },
-    { id: 2, type: "Investment", amount: 50000, status: "Active" },
-    { id: 3, type: "Withdrawal", amount: 25000, status: "Pending" },
-  ]);
+export default function Deposit() {
+  const [amount, setAmount] = useState("");
+  const [proof, setProof] = useState(null);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>📊 Main Panel</h2>
-      <p>Welcome to <b>MONETA-ICT Colombia 🇨🇴</b></p>
+    <div style={{ padding: 20 }}>
+      <h2>💰 Depositar Fondos</h2>
+      <p>📍 Método bancario (Colombia)</p>
 
-      {/* SUMMARY CARDS */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "15px", marginTop: "20px" }}>
-        <Card title="Balance" value={`$ ${stats.balance.toLocaleString()} COP`} />
-        <Card title="Welcome Bonus" value={`$ ${stats.bonus.toLocaleString()} COP`} />
-        <Card title="Active Investments" value={stats.investments} />
-        <Card title="Referrals" value={stats.referrals} />
+      <div style={{ background: "#f5f5f5", padding: 15, borderRadius: 6 }}>
+        <p><b>Banco:</b> Bancolombia</p>
+        <p><b>Tipo:</b> Ahorro</p>
+        <p><b>Número:</b> 00100007120</p>
+        <p><b>Titular:</b> Jose Jimenez</p>
       </div>
 
-      {/* TRANSACTIONS */}
-      <h3 style={{ marginTop: "30px" }}>🧾 Recent Activity</h3>
-      <table width="100%" border="1" cellPadding="8" style={{ marginTop: "10px" }}>
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Amount (COP)</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map(tx => (
-            <tr key={tx.id}>
-              <td>{tx.type}</td>
-              <td>{tx.amount.toLocaleString()}</td>
-              <td>{tx.status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
+      <p style={{ marginTop: 15 }}>
+        💡 Mínimo depósito: <b>$40.000 COP</b>
+      </p>
 
-function Card({ title, value }) {
-  return (
-    <div style={{
-      border: "1px solid #ccc",
-      borderRadius: "8px",
-      padding: "15px",
-      background: "#f9f9f9"
-    }}>
-      <h4>{title}</h4>
-      <strong>{value}</strong>
+      <input
+        type="number"
+        placeholder="Monto en COP"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+      />
+
+      <input
+        type="file"
+        onChange={(e) => setProof(e.target.files[0])}
+      />
+
+      <button
+        onClick={() => alert("Depósito enviado. Pendiente de aprobación.")}
+      >
+        📤 Enviar comprobante
+      </button>
+
+      <p style={{ marginTop: 10, color: "gray" }}>
+        ⏳ Los depósitos se aprueban vía Telegram.
+      </p>
     </div>
   );
 }
