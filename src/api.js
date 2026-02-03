@@ -6,7 +6,7 @@ const BASE_URL =
   "https://moneta-ict-backend.onrender.com/api";
 
 /**
- * Normalize endpoint to always start with /
+ * Ensure endpoint always starts with "/"
  */
 function normalizeEndpoint(endpoint) {
   if (!endpoint.startsWith("/")) {
@@ -16,10 +16,10 @@ function normalizeEndpoint(endpoint) {
 }
 
 /**
- * Core API request function
- * @param {string} endpoint - API endpoint (example: "/auth/login")
- * @param {string} method - HTTP method
- * @param {object|null} data - request body
+ * Core API Request Function
+ * @param {string} endpoint
+ * @param {string} method
+ * @param {object|null} data
  * @returns {Promise<object>}
  */
 export async function apiRequest(endpoint, method = "GET", data = null) {
@@ -34,7 +34,7 @@ export async function apiRequest(endpoint, method = "GET", data = null) {
     },
   };
 
-  // Attach token if available
+  // Attach JWT token if available
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -47,7 +47,6 @@ export async function apiRequest(endpoint, method = "GET", data = null) {
   try {
     const response = await fetch(url, config);
 
-    // Safely parse response
     const text = await response.text();
     let result;
 
@@ -69,7 +68,7 @@ export async function apiRequest(endpoint, method = "GET", data = null) {
 }
 
 /**
- * Convenience helpers (optional but clean)
+ * Convenience Helpers
  */
 
 export const apiGet = (endpoint) =>
@@ -83,3 +82,10 @@ export const apiPut = (endpoint, data) =>
 
 export const apiDelete = (endpoint) =>
   apiRequest(endpoint, "DELETE");
+
+/**
+ * 🔥 CRITICAL FIX
+ * This prevents Railway build error:
+ * "api is not exported from './api'"
+ */
+export const api = apiRequest;
